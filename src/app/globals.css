@@ -1,0 +1,115 @@
+@import url("https://fonts.cdnfonts.com/css/sf-pro-display");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.sfprodisplay {
+  font-family: "SF Pro Display", sans-serif;
+}
+
+@layer utilities {
+  .bgPrimaryColor {
+    background-image: linear-gradient(
+        135deg,
+        rgba(61, 61, 61, 0.08) 0%,
+        rgba(61, 61, 61, 0.08) 16%,
+        rgba(209, 209, 209, 0.08) 16%,
+        rgba(209, 209, 209, 0.08) 53%,
+        rgba(180, 180, 180, 0.08) 53%,
+        rgba(180, 180, 180, 0.08) 75%,
+        rgba(247, 247, 247, 0.08) 75%,
+        rgba(247, 247, 247, 0.08) 81%,
+        rgba(161, 161, 161, 0.08) 81%,
+        rgba(161, 161, 161, 0.08) 83%,
+        rgba(17, 17, 17, 0.08) 83%,
+        rgba(17, 17, 17, 0.08) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(105, 105, 105, 0.1) 0%,
+        rgba(105, 105, 105, 0.1) 11%,
+        rgba(103, 103, 103, 0.1) 11%,
+        rgba(103, 103, 103, 0.1) 50%,
+        rgba(7, 7, 7, 0.1) 50%,
+        rgba(7, 7, 7, 0.1) 69%,
+        rgba(166, 166, 166, 0.1) 69%,
+        rgba(166, 166, 166, 0.1) 100%
+      ),
+      linear-gradient(
+        135deg,
+        rgba(40, 40, 40, 0.1) 0%,
+        rgba(40, 40, 40, 0.1) 31%,
+        rgba(216, 216, 216, 0.1) 31%,
+        rgba(216, 216, 216, 0.1) 34%,
+        rgba(24, 24, 24, 0.1) 34%,
+        rgba(24, 24, 24, 0.1) 36%,
+        rgba(107, 107, 107, 0.1) 36%,
+        rgba(107, 107, 107, 0.1) 53%,
+        rgba(228, 228, 228, 0.1) 53%,
+        rgba(228, 228, 228, 0.1) 60%,
+        rgba(136, 136, 136, 0.1) 60%,
+        rgba(136, 136, 136, 0.1) 92%,
+        rgba(88, 88, 88, 0.1) 92%,
+        rgba(88, 88, 88, 0.1) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(180, 180, 180, 0.01) 0%,
+        rgba(180, 180, 180, 0.01) 8%,
+        rgba(250, 250, 250, 0.01) 8%,
+        rgba(250, 250, 250, 0.01) 62%,
+        rgba(101, 101, 101, 0.01) 62%,
+        rgba(101, 101, 101, 0.01) 82%,
+        rgba(243, 243, 243, 0.01) 82%,
+        rgba(243, 243, 243, 0.01) 89%,
+        rgba(22, 22, 22, 0.01) 89%,
+        rgba(22, 22, 22, 0.01) 90%,
+        rgba(73, 73, 73, 0.01) 90%,
+        rgba(73, 73, 73, 0.01) 96%,
+        rgba(61, 61, 61, 0.01) 96%,
+        rgba(61, 61, 61, 0.01) 100%
+      ),
+      linear-gradient(90deg, rgb(11, 170, 156), rgb(60, 8, 248));
+  }
+}
+
+.bgSidebar {
+  background-color: #484848bb;
+  backdrop-filter: blur(20px);
+}
+
+.bg-login {
+  background-image: url(../../public/image/bg-login.svg);
+}
+
+.grad-login {
+  background: rgb(39, 42, 55);
+  background: linear-gradient(
+    70deg,
+    rgba(39, 42, 55, 1) 45%,
+    rgba(39, 42, 55, 0.648) 95%
+  );
+}
+
+/* .absolute-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+} */
+
+.menu-shadow {
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.menu-card-shadow {
+  box-shadow: rgba(0, 0, 0, 0.1) -4px 9px 25px -6px;
+}
+
+.menu-img-shadow {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+}
+
+.transform-translate {
+  transform: translate(-50%, -50%);
+}
