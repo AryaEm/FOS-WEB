@@ -9,7 +9,7 @@ const Modal = ({ children, isShow, onClose }: { children: ReactNode, isShow: boo
         if (event.target === event.currentTarget) onClose(false)
     }
     return (
-        <div className={`w-full h-dvh z-[1024] bg-slate-800 bg-opacity-90 fixed top-0 left-0 ${isShow ? `flex` : `hidden`} justify-center items-center`}
+        <div className={`w-full h-dvh z-[1024] bg-slate-800 bg-opacity-90 backdrop-blur-md fixed top-0 left-0 ${isShow ? `flex` : `hidden`} justify-center items-center`}
             onClick={handleClickOutside}>
             <div className="w-5/6 md:w-4/6 lg:w-3/6 overflow-auto max-h-full bg-white rounded-2xl">
                 {children}

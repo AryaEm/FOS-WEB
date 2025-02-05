@@ -48,7 +48,7 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
 
     return (
         <>
-            <div className="top-5 left-6 bg-zinc-800 flex p-3 z-[999] rounded-2xl fixed">
+            <div className="top-5 left-6 bg-zinc-700 flex p-3 z-[999] rounded-2xl fixed">
                 <button onClick={toggleSidebar}>
                     <RxHamburgerMenu className="text-[1.2rem] text-white" />
                 </button>
@@ -61,7 +61,7 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
 {/* 
             <div className={`h-dvh flex items-center absolute top-0 transition-all duration-500 ${isSidebarVisible ? "translate-x-0" : "-translate-x-[21rem"
                 }`}> */}
-                <div className={`w-80 top-[0.35rem] z-50 h-[98dvh] bg-[#1D2027] fixed border bg-opacity-70 backdrop-blur-2xl flex rounded-2xl flex-col transform transition-all duration-500 ${isSidebarVisible ? `translate-x-2` : `-translate-x-[21rem]`
+                <div className={`w-80 top-[0.35rem] z-50 h-[98dvh] bg-[#1D2027] fixed bg-opacity-70 backdrop-blur-2xl flex rounded-2xl flex-col transform transition-all duration-500 ${isSidebarVisible ? `translate-x-2` : `-translate-x-[21rem]`
                     } `}>
                     {/* logo section */}
                     <div className="mb-3 w-full flex justify-center py-4">

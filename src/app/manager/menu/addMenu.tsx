@@ -4,14 +4,15 @@ import { IMenu } from "@/app/types"
 import { BASE_API_URL } from "../../../../global"
 import { post } from "@/lib/api-bridge"
 import { getCookies } from "@/lib/client-cookie"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
 import { FormEvent, useRef, useState } from "react"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 import { ButtonSuccesOutline, ButtonSuccess, ButtonDanger } from "@/components/button"
 import { InputGroupComponent } from "@/components/InputComponent"
 import Modal from "@/components/Modal"
 import Select from "@/components/Select"
 import FileInput from "@/components/FileInput"
+import { useRouter } from "next/navigation"
 
 
 const AddMenu = () => {
@@ -20,10 +21,11 @@ const AddMenu = () => {
         id: 0, uuid: ``, name: ``, price: 0, description: ``,
         category: ``, picture: ``, createdAt: ``, updatedAt: ``
     })
-    const router = useRouter()
+    // const router = useRouter()
     const TOKEN = getCookies("token") || ""
     const [file, setFile] = useState<File | null>(null)
     const formRef = useRef<HTMLFormElement>(null)
+    const router = useRouter()
 
     const openModal = () => {
         setMenu({
@@ -61,7 +63,7 @@ const AddMenu = () => {
 
     return (
         <div>
-            <ToastContainer containerId={`toastMenu`} />
+            {/* <ToastContainer containerId={`toastMenu`} /> */}
             <ButtonSuccess type="button" onClick={() => openModal()}>
                 <div className="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">

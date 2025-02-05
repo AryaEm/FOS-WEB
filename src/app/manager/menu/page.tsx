@@ -4,15 +4,16 @@ import { BASE_API_URL, BASE_IMAGE_MENU } from "../../../../global"
 import { get } from "@/lib/api-bridge"
 import { AlertInfo } from "@/components/alert/index"
 import AddMenu from "./addMenu"
-// import EditMenu from "./editMenu"
-// import DeleteMenu from "./deleteMenu"
+import EditMenu from "./editMenu"
+import DeleteMenu from "./deleteMenu"
 import Image from "next/image"
-import Search from "./search"
+import Search from "../../search"
 
 // Icon
 // import { IoFastFoodOutline } from "react-icons/io5";
-import { MdOutlineEmojiFoodBeverage } from "react-icons/md";
-import { PiBowlFood } from "react-icons/pi";
+// import { MdEmojiFoodBeverage } from "react-icons/md";
+// import { PiBowlFoodFill } from "react-icons/pi";
+// import { IoFastFoodSharp } from "react-icons/io5";
 
 const getMenu = async (search: string): Promise<IMenu[]> => {
     try {
@@ -30,42 +31,26 @@ const getMenu = async (search: string): Promise<IMenu[]> => {
 
 const MenuPage = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
     const search = searchParams.search ? searchParams.search.toString() : ``
-    const menu: IMenu[] = await getMenu(search)
-
-    const category = (cat: string): React.ReactNode => {
-        if (cat === "FOOD") {
-            return <span className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">
-                Food
-            </span>
-        }
-        if (cat === "SNACK") {
-            return <span className="bg-indigo-100 text-indigo-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-indigo-900 dark:text-indigo-300">
-                Snack
-            </span>
-        }
-        return <span className="bg-purple-100 text-purple-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-purple-900 dark:text-purple-300">
-            Drink
-        </span>
-    }
-
-
+    const menu: IMenu[] = await
+        getMenu(search)
 
     return (
-        <div className="min-h-dvh w-full pt-6 bg-[#FEF5E4]">
-            <div className="mx-20 bg-[#F7F4F3] rounded-lg p-3 border-l-4 border-[#5B2333] menu-shadow">
-                <h4 className="text-xl font-bold mb-2">Menu Data</h4>
-                <p className="text-sm text-secondary mb-4">
+        <div className="min-h-dvh bg-[#282828] menu-shadow flex justify-center pt-32 pb-10">
+            <div className="w-3/4 h-fit">
+
+                <h4 className="text-7xl text-white font-bold mb-2">Menus</h4>
+                <p className="text-sm text-secondary my-4 text-white text-opacity-60">
                     This page displays menu data, allowing menus to view details,
                     search, and manage menu items by adding, editing, or deleting them.
                 </p>
-                <div className="flex justify-between items-center mb-6">
-                    <div className="flex items-center w-full max-w-md flex-grow">
+                <div className="flex items-center my-12 ">
+                    <div className="flex w-full max-w-md flex-grow">
                         <Search url={`/manager/menu`} search={search} />
                     </div>
 
-                    <div className="ml-4">
-                       <AddMenu />
-                   </div>
+                    <div className="ml-5">
+                        <AddMenu />
+                    </div>
                 </div>
 
                 {
@@ -75,48 +60,36 @@ const MenuPage = async ({ searchParams }: { searchParams: { [key: string]: strin
                         </AlertInfo>
                         :
                         <>
-                            <div className="m-2 flex flex-wrap md: justify-between">
+                            <div className="w-full flex flex-wrap justify-center gap-12">
                                 {menu.map((data, index) => (
-                                    <div key={`keyPrestasi${index}`} className={`group w-[22%] mt-24 my-5 h-[19rem] hover:backdrop-blur-md bg-white border-2 border-[#5B2333] relative rounded-xl cursor-pointer menu-card-shadow`}>
-                                        <div className=" transform transition-transform relative">
+                                    <div key={`keyPrestasi${index}`} className={`flex w-full h-80 cursor-pointer`}>
+                                        <div className="h-80 w-[45%] bg-[#323444] overflow-hidden flex items-end justify-center rounded-xl border-l-4 border-teal-500">
+                                            <Image width={40} height={40} src={`${BASE_IMAGE_MENU}/${data.picture}`} className="w-3/4 h-3/4 rounded object-cover" alt="preview" unoptimized />
+                                        </div>
 
-                                            <div className="absolute h-full w-full flex items-center rounded-xl justify-center bg-transparent group-hover:bg-black group-hover:bg-opacity-10 group-hover:backdrop-blur text-black font-semibold z-10 group-hover:opacity-100 opacity-0 transition-all duration-300">
-                                                action
+                                        <div className="w-[60%] h-full sfprodisplay relative">
+                                            <div className="text-white text-opacity-60 pl-6 pt-10">
+                                                {data.category}
                                             </div>
-
-                                            <div className="relative -top-20 flex flex-col items-center">
-                                                <div className="w-44 h-44 transition-opacity duration-300 group-hover:opacity-0">
-                                                    <Image width={40} height={40} src={`${BASE_IMAGE_MENU}/${data.picture}`} className="rounded-full menu-img-shadow w-full h-full object-cover overflow-hidden" alt="preview" unoptimized />
-                                                </div>
-                                                <div className="w-full mt-4 text-center sfprodisplay font-medium tracking-wide text-xl">
-                                                    {data.name}
-                                                </div>
-                                                <div className="w-full h-14 sfprodisplay text-center mb-1 text-sm text-black text-opacity-60 p-2">
-                                                    {data.description}
-                                                </div>
-                                                <div className="items-center justify-center w-full">
-                                                    <div className="w-full flex items-center justify-center gap-2">
-                                                        {data.category === "Food" && (<PiBowlFood className="text-2xl text-opacity-40 text-black" />)}
-                                                        {data.category === "Drink" && (<MdOutlineEmojiFoodBeverage className="text-2xl text-black text-opacity-40" />)}
-                                                        <p className="text-black text-opacity-40">
-                                                            {data.category}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                {/* <div className="w-full md:w-2/12">
-                                                <small className="text-sm font-bold text-primary">Action</small><br />
-                                                </div> */}
+                                            <div className="text-white pl-6 text-3xl tracking-wide py-3 font-semibold">
+                                                {data.name}
                                             </div>
-                                            <div className="w-fit sfprodisplay absolute group-hover:blur-md right-4 bottom-3 flex text-black text-opacity-60 gap-1">
-                                                <p className="font-medium text-xl text-end">Rp {data.price}</p>
+                                            <div className="text-white text-opacity-70 text-sm tracking-wide pt-2 w-full pl-6 flex justify-between">
+                                                <p className="w-3/4">{data.description}</p>
+                                                <p className="text-xl">Rp {data.price}</p>
+                                            </div>
+                                            <div className="w-fit pl-6 flex gap-3 absolute bottom-0">
+                                                <DeleteMenu selectedMenu={data} />
+                                                <EditMenu selectedMenu={data} />
                                             </div>
                                         </div>
+
                                     </div>
                                 ))}
+
                             </div>
                         </>
                 }
-
 
             </div>
         </div>

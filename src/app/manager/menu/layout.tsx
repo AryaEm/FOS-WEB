@@ -1,5 +1,6 @@
 import ManagerTemplate from "@/components/managerTemplate"
 import MenuList from "../menuList"
+import { ToastContainer } from "react-toastify"
 
 export const metadata = {
     title: 'Menu | FOS',
@@ -15,6 +16,7 @@ const RootLayout = ({ children }: PropsLayout) => {
         <ManagerTemplate title="Menu" id="Menu"
             menuList={MenuList}>
             {children}
+            <ToastContainer containerId={`toastMenu`} />
         </ManagerTemplate>
     )
 }

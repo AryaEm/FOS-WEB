@@ -20,7 +20,7 @@ const Select = ({ value, onChange, className, id, required, children, label }: P
                 label ?
                     <strong className="text-xs font-bold text-slate-500">
                         {label}
-                        {required == true ? <sup className="text-red-600">*&#41;</sup> : <></>}
+                        {/* {required == true ? <sup className="text-red-600">*&#41;</sup> : <></>} */}
                     </strong> :
                     <></>
             }

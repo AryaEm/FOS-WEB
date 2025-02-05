@@ -29,7 +29,7 @@ export const InputComponent = ({ value, onChange, type, className, id, required,
 export const InputGroupComponent = ({ value, onChange, type, className, id, required, placeholder, children, label, onKeyUp, readOnly }: Props) => {
     return (
         <div className="w-full flex flex-col gap-1 my-2">
-            <strong className="text-xs font-bold text-slate-500">{label}{required == true ? <sup className="text-red-600">*&#41;</sup> : <></>}</strong>
+            {/* <strong className="text-xs font-bold text-slate-500">{label}{required == true ? <sup className="text-red-600">*&#41;</sup> : <></>}</strong> */}
             <div className="w-full flex items-center gap-1 bg-white border-slate-500 rounded-md border">
                 {
                     children ?
