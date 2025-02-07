@@ -7,11 +7,12 @@ import Image from "next/image"
 import Search from "@/app/search"
 import AddUser from "./addUser"
 import EditUser from "./editUser"
+import DeleteUser from "./deleteUser"
 
 // Icon
 import { MdEmojiFoodBeverage } from "react-icons/md";
 import { PiBowlFoodFill } from "react-icons/pi";
-import DeleteUser from "./deleteUser"
+import ResetPassword from "./resetPassword"
 
 const getUser = async (search: string): Promise<IUser[]> => {
     try {
@@ -60,22 +61,23 @@ const UserPage = async ({ searchParams }: { searchParams: { [key: string]: strin
                         </AlertInfo>
                         :
                         <>
-                            <div className="w-full flex flex-wrap justify-center    ">
+                            <div className="w-full flex flex-wrap justify-center gap-3">
                                 {user.map((data, index) => (
-                                    <div key={`keyPrestasi${index}`} className={`flex bg-[#505050] rounded-lg w-full m-2 h-20 sfprodisplay`}>
+                                    <div key={`keyPrestasi${index}`} className={`flex bg-[#505050] rounded-lg w-full h-20 sfprodisplay`}>
                                         <div className="w-20 h-full flex items-center justify-center p-px">
                                             <Image width={40} height={40} src={`${BASE_IMAGE_PROFILE}/${data.profile_picture}`} className="rounded-full h-14 w-14 object-cover overflow-hidden" alt="preview" unoptimized />
                                         </div>
-                                        <div className="w-2/5 p-2 flex h-full items-center font-semibold sfprodisplay text-white text-opacity-80">
+                                        <div className="w-[15%] p-2 flex h-full items-center font-semibold sfprodisplay text-white text-opacity-80">
                                             {data.name}
                                         </div>
-                                        <div className="w-[15%] flex items-center text-white text-opacity-60 font-normal tracking-wide">
-                                            {data.role}
-                                        </div>
-                                        <div className="w-[28%] flex items-center text-white text-opacity-60">
+                                        <div className="w-[20%] flex items-center text-white text-opacity-60">
                                             {data.email}
                                         </div>
+                                        <div className="w-[34%] flex items-center text-white text-opacity-60 font-normal tracking-wide">
+                                            {data.role}
+                                        </div>
                                         <div className="flex gap-2 items-center">
+                                            <ResetPassword selectedUser={data}></ResetPassword>
                                             <EditUser selectedUser={data} />
                                             <DeleteUser selectedUser={data} />
                                         </div>

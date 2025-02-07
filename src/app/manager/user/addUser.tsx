@@ -99,8 +99,11 @@ const AddUser = () => {
                         </div>
                     </div>
                     <div className="p-5">
+                        <p>Name</p>
                         <InputGroupComponent id="name" type="text" value={user.name} onChange={val => setUser({ ...user, name: val })} required={true} label="Name" />
+                        <p>Email</p>
                         <InputGroupComponent id="email" type="email" value={user.email} onChange={val => setUser({ ...user, email: val })} required={true} label="Email" />
+                        <p>Password</p>
                         <InputGroupComponent id="password" type="password" value={user.password} onChange={val => setUser({ ...user, password: val })} required={true} label="Password" />
                         <Select id="role" value={user.role} label="Role" required={true} onChange={val => setUser({ ...user, role: val })}>
                             <option value="">--- Select Role ---</option>

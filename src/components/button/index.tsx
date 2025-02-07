@@ -65,3 +65,13 @@ export const ButtonInfoOutline = ({ children, type, onClick, className }: Props)
         </button>
     )
 }
+
+
+export const ButtonReset = ({ children, type, onClick, className }: Props) => {
+    return (
+        <button className={`text-sm bg-transparent text-red-600 border border-red-600 rounded-md bg-opacity-80 py-2 px-4 hover:bg-red-600 transition-all duration-300 hover:text-white font-bold ${className}`}
+            type={type} onClick={() => { if (onClick) onClick() }}>
+            {children}
+        </button>
+    )
+}

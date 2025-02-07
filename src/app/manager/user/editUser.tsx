@@ -98,9 +98,9 @@ export default function EditUser({ selectedUser }: { selectedUser: IUser }) {
                             required={true} label="email" />
 
 
-                        <InputGroupComponent id={`password`} type="password" value={user.password}
+                        {/* <InputGroupComponent id={`password`} type="password" value={user.password}
                             onChange={val => setUser({ ...user, password: val })}
-                            required={true} label="Password" />
+                            required={true} label="Password" /> */}
 
 
                         <Select id={`category`} value={user.role} label="Role"
