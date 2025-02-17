@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useState } from "react"
 import Image from "next/image"
 import MenuItem from "./menuItem"
 import Logo from '../../../public/image/among-us-6044191_960_720.webp'
+import Profile from '../../../public/image/mici.jpg'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoLogOut } from "react-icons/io5";
 import { getCookies, removeCookie } from "@/lib/client-cookie"
@@ -56,7 +57,7 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
 
     return (
         <>
-            <div className="top-5 left-6 bg-zinc-700 flex p-3 z-[999] rounded-2xl fixed">
+            <div className="top-5 left-6 bg-zinc-700 flex h-12 w-12 items-center justify-center z-[999] rounded-2xl fixed">
                 <button onClick={toggleSidebar}>
                     <RxHamburgerMenu className="text-[1.2rem] text-white" />
                 </button>

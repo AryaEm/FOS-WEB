@@ -48,7 +48,7 @@ const AddMenu = () => {
             payload.append("description", description || "")
             if (file !== null) payload.append("picture", file || "")
             const { data } = await post(url, payload, TOKEN)
-            if (data?.status) {
+            if (data?.status) { 
                 setIsShow(false)
                 toast(data?.message, { hideProgressBar: true, containerId: `toastMenu`, type: `success` })
                 setTimeout(() => router.refresh(), 1000)

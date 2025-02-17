@@ -10,6 +10,7 @@ import { toast } from "react-toastify"
 import { ButtonDanger, ButtonSuccess, ButtonReset } from "@/components/button"
 import { InputGroupComponent } from "@/components/InputComponent"
 import EditModal from "@/components/Modal"
+import { IoKeyOutline } from "react-icons/io5";
 
 export default function ResetPassword({ selectedUser }: { selectedUser: IUser }) {
     const [isShow, setIsShow] = useState<boolean>(false)
@@ -45,7 +46,7 @@ export default function ResetPassword({ selectedUser }: { selectedUser: IUser })
 
             const response = await put(url, payload, TOKEN)
             const { data } = response
-            
+
             if (data?.status) {
                 setIsShow(false)
                 toast(data?.message, { hideProgressBar: true, containerId: `toastUser`, type: `success` })
@@ -63,7 +64,7 @@ export default function ResetPassword({ selectedUser }: { selectedUser: IUser })
         <div >
             {/* <ToastContainer containerId={`toastMenu`} /> */}
             <ButtonReset type="button" onClick={() => openModal()}>
-                Change Password
+                <IoKeyOutline></IoKeyOutline>
             </ButtonReset>
 
             <EditModal isShow={isShow} onClose={state => setIsShow(state)}>

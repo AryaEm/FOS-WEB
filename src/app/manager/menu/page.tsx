@@ -15,24 +15,24 @@ import Search from "../../search"
 // import { PiBowlFoodFill } from "react-icons/pi";
 // import { IoFastFoodSharp } from "react-icons/io5";
 
-const getMenu = async (search: string): Promise<IMenu[]> => {
-    try {
-        const TOKEN = await getCookies("token")
-        const url = `${BASE_API_URL}/menu?search=${search}`
-        const { data } = await get(url, TOKEN)
-        let result: IMenu[] = []
-        if (data?.status) result = [...data.data]
-        return result
-    } catch (error) {
-        console.log(error)
-        return []
+    const getMenu = async (search: string): Promise<IMenu[]> => {
+        try {
+            const TOKEN = await getCookies("token")
+            const url = `${BASE_API_URL}/menu?search=${search}`
+            const { data } = await get(url, TOKEN)
+            let result: IMenu[] = []
+            if (data?.status) result = [...data.data]
+            return result
+        } catch (error) {
+            console.log(error)
+            return []
+        }
     }
-}
 
 const MenuPage = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
     const search = searchParams.search ? searchParams.search.toString() : ``
-    const menu: IMenu[] = await
-        getMenu(search)
+        const menu: IMenu[] = await
+            getMenu(search)
 
     return (
         <div className="min-h-dvh bg-[#282828] menu-shadow flex justify-center pt-32 pb-10">
@@ -44,7 +44,7 @@ const MenuPage = async ({ searchParams }: { searchParams: { [key: string]: strin
                     search, and manage menu items by adding, editing, or deleting them.
                 </p>
                 <div className="flex items-center my-12 ">
-                    <div className="flex w-full max-w-md flex-grow">
+                    <div className="flex w-full max-w-md flex-grow h-10">
                         <Search url={`/manager/menu`} search={search} />
                     </div>
 

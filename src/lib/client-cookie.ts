@@ -5,7 +5,7 @@ export const storeCookie = (key: string, plainText: string) => {
 }
 
 export const getCookies = (key: string) => {
-    return Cookies.get(key)
+    return Cookies.get(key)!
 }
 
 export const removeCookie = (key: string) => {

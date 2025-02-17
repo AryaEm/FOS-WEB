@@ -15,7 +15,7 @@ import FileInput from "@/components/FileInput"
 
 export default function EditUser({ selectedUser }: { selectedUser: IUser }) {
     const [isShow, setIsShow] = useState<boolean>(false)
-    const [user, setUser] = useState<IUser>(selectedUser || { name: "", email: "", password: "", role: "", profile_picture: "" })
+    const [user, setUser] = useState<IUser>(selectedUser || { name: "", email: "", role: "", profile_picture: "" })
     const router = useRouter()
     const TOKEN = getCookies("token") || ""
     const [file, setFile] = useState<File | null>(null)
@@ -31,12 +31,11 @@ export default function EditUser({ selectedUser }: { selectedUser: IUser }) {
         try {
             e.preventDefault()
             const url = `${BASE_API_URL}/user/${selectedUser.id}`
-            const { name, email, role, password } = user
+            const { name, email, role } = user
             const payload = new FormData()
             payload.append("name", name || "")
             payload.append("email", email || "")
             payload.append("role", role || "")
-            payload.append("password", password || "")
             if (file !== null) payload.append("picture", file || "")
             const response = await put(url, payload, TOKEN)
             if (!response || !response.data) {
