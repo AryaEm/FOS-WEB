@@ -1,5 +1,6 @@
 import UserTemplate from "@/components/cashierTemplate"
 import MenuListCashier from "../menuListCashier"
+import { CartProvider } from "./cartContext"
 
 export const metadata = {
     title: 'Transaksi | FOS',
@@ -12,10 +13,11 @@ type PropsLayout = {
 
 const RootLayout = ({ children }: PropsLayout) => {
     return (
-        <UserTemplate title="Menu" id="menu"
-            menuList={MenuListCashier}>
-            {children}
-        </UserTemplate>
+        <CartProvider>
+            <UserTemplate title="Menu" id="menu" menuList={MenuListCashier}>
+                {children}
+            </UserTemplate>
+        </CartProvider>
     )
 }
 export default RootLayout

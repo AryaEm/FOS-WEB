@@ -10,4 +10,4 @@ export const setCookies = async (key: string, value: string) => {
 
 export const removeCookies = async (key: string) => {
     (await cookies()).delete(key)
-}
+}   

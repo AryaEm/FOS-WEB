@@ -7,7 +7,7 @@ import Logo from '../../../public/image/among-us-6044191_960_720.webp'
 import Profile from '../../../public/image/mici.jpg'
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoLogOut } from "react-icons/io5";
-import { getCookies, removeCookie } from "@/lib/client-cookie"
+import { getCookie, removeCookie } from "@/lib/client-cookie"
 import { useRouter } from "next/navigation"
 import { BASE_IMAGE_PROFILE } from "../../../global" // Pastikan BASE_IMAGE_PROFILE sesuai dengan API
 
@@ -32,8 +32,8 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
     const router = useRouter()
 
     useEffect(() => {
-        setUserData(getCookies("name"))
-        setUserProfil(getCookies("profile_picture"))
+        setUserData(getCookie("name"))
+        setUserProfil(getCookie("profile_picture"))
     }, [])
 
     // const toggleDropdown = () => {

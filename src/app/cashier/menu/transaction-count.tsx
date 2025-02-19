@@ -10,7 +10,7 @@ interface QuantityCounterProps {
   onChange?: (value: number) => void;
 }
 
-const QuantityCounter = ({ initialQuantity = 1, min = 1, max = 99, onChange }: QuantityCounterProps) => {
+const QuantityCounter = ({ initialQuantity = 0, min = 0, max = 99, onChange }: QuantityCounterProps) => {
   const [quantity, setQuantity] = useState(initialQuantity);
 
   const increment = () => {
@@ -30,24 +30,18 @@ const QuantityCounter = ({ initialQuantity = 1, min = 1, max = 99, onChange }: Q
   };
 
   return (
-    <div className="border border-blue-500 flex gap-2 px-5 pb-5 items-center">
-      <button
-        onClick={decrement}
-        className="h-6 w-6 flex items-center justify-center hover:opacity-80"
-      >
-        <FaCircleMinus className="h-full w-full text-white text-opacity-60" />
+    <div className="bg-[#747474] flex gap-2 mt-4 p-2 rounded-full items-center w-32  justify-between">
+      <button onClick={increment} className="h-8 w-8 flex items-center justify-center hover:opacity-80">
+        <FaCirclePlus className="h-full w-full text-teal-400" />
       </button>
 
-      <p>{quantity}</p>
+      <p className="sfprodisplay font-semibold text-white">{quantity}</p>
 
-      <button
-        onClick={increment}
-        className="h-6 w-6 flex items-center justify-center hover:opacity-80"
-      >
-        <FaCirclePlus className="h-full w-full text-teal-400 text-opacity-60" />
+      <button onClick={decrement} className="h-8 w-8 flex items-center justify-center hover:opacity-80">
+        <FaCircleMinus className="h-full w-full text-red-400" />
       </button>
     </div>
   );
 };
 
-export default QuantityCounter;
+export default QuantityCounter

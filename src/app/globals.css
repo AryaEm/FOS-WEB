@@ -119,3 +119,13 @@
 .transform-translate {
   transform: translate(-50%, -50%);
 }
+
+.custom-border-color {
+  background: rgb(59, 193, 176);
+  background: linear-gradient(
+    90deg,
+    rgba(59, 193, 176, 1) 15%,
+    rgba(59, 193, 175, 0.569) 35%,
+    rgba(59, 193, 176, 0) 100%
+  );
+}

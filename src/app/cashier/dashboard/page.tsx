@@ -64,7 +64,7 @@ const DashboardPage = async ({ searchParams }: { searchParams: { [key: string]: 
         <div className="flex flex-col w-full min-h-dvh bg-[#282828] items-center">
 
             <div className="w-3/4 h-[900px] mt-20">
-                <div className="bg-cyan-200 w-full h-72 rounded-xl"></div>
+                <div className="bg-cyan-200 w-full lg:h-72 h-52 rounded-xl"></div>
 
                 {
                     menuCategories.length == 0 ?
