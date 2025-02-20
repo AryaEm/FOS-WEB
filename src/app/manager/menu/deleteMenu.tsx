@@ -3,7 +3,7 @@
 import { IMenu } from "@/app/types"
 import { BASE_API_URL } from "../../../../global"
 import { drop } from "@/lib/api-bridge"
-import { getCookies } from "@/lib/client-cookie"
+import { getCookie } from "@/lib/client-cookie"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 import { toast } from "react-toastify"
@@ -18,7 +18,7 @@ export default function DeleteMenu({ selectedMenu }: { selectedMenu: IMenu }) {
     const [isShow, setIsShow] = useState<boolean>(false)
     const [menu, setMenu] = useState<IMenu>({ ...selectedMenu })
     const router = useRouter()
-    const TOKEN = getCookies("token") || ""
+    const TOKEN = getCookie("token") || ""
 
     const openModal = () => {
         setMenu({ ...selectedMenu })

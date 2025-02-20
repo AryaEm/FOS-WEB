@@ -8,7 +8,8 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoLogOut } from "react-icons/io5";
 import { getCookie, removeCookie } from "@/lib/client-cookie"
 import { useRouter } from "next/navigation"
-import { BASE_IMAGE_PROFILE } from "../../../global" // Pastikan BASE_IMAGE_PROFILE sesuai dengan API
+import { BASE_IMAGE_PROFILE } from "../../../global"
+import { useCart } from "@/app/cashier/menu/cartContext"
 
 type MenuType = {
     id: string,
@@ -49,6 +50,7 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
         removeCookie("name")
         removeCookie("role")
         removeCookie("profile_picture")
+        removeCookie("cart")
         router.replace(`/login`)
     };
 

@@ -9,5 +9,5 @@ export const getCookie = (key: string) => {
 }
 
 export const removeCookie = (key: string) => {
-    Cookies.remove(key)
+    Cookies.remove(key, { expires: 0 })
 }   

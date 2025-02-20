@@ -25,3 +25,14 @@ export interface IUser {
 export interface IMenuCategory {
     category: string
 }
+
+export interface ICartItem {
+    id: number;
+    uuid: string;
+    name: string;
+    price: number;
+    category: string;
+    picture: string;
+    description: string;
+    quantity: number;
+}

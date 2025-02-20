@@ -129,3 +129,22 @@
     rgba(59, 193, 176, 0) 100%
   );
 }
+
+.cashier-cart-shadow {
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 15px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  display: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #0D9488;
+  border-radius: 50px;
+
+}

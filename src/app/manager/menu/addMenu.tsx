@@ -3,7 +3,7 @@
 import { IMenu } from "@/app/types"
 import { BASE_API_URL } from "../../../../global"
 import { post } from "@/lib/api-bridge"
-import { getCookies } from "@/lib/client-cookie"
+import { getCookie } from "@/lib/client-cookie"
 // import { useRouter } from "next/navigation"
 import { FormEvent, useRef, useState } from "react"
 import { toast } from "react-toastify"
@@ -22,7 +22,7 @@ const AddMenu = () => {
         category: ``, picture: ``, createdAt: ``, updatedAt: ``
     })
     // const router = useRouter()
-    const TOKEN = getCookies("token") || ""
+    const TOKEN = getCookie("token") || ""
     const [file, setFile] = useState<File | null>(null)
     const formRef = useRef<HTMLFormElement>(null)
     const router = useRouter()
