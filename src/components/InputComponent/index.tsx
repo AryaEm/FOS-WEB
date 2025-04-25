@@ -26,6 +26,16 @@ export const InputComponent = ({ value, onChange, type, className, id, required,
     )
 }
 
+export const InputNote = ({ value, onChange, type, className, id, required, placeholder, onKeyUp }: Props) => {
+    return (
+        <input type={type} id={id} value={value} onChange={e => onChange(e.target.value)}
+            className={`text-sm w-full rounded-md p-2 bg-[#535353] border border-secondary focus:border-primary focus:outline-none ${className}`}
+            required={required ? required : false} placeholder={placeholder || ""} onKeyUp={e => {
+                if (onKeyUp) onKeyUp(e)
+            }} />
+    )
+}
+
 export const InputGroupComponent = ({ value, onChange, type, className, id, required, placeholder, children, label, onKeyUp, readOnly }: Props) => {
     return (
         <div className="w-full flex flex-col gap-1 my-2">

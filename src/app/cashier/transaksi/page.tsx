@@ -1,40 +1,29 @@
-import { IMenu, IMenuCategory } from "@/app/types"
-import { getCookies } from "@/lib/server-cookie"
+"use client"
+
+import { useState, useEffect } from "react"
+import { ITransactionHistory } from "@/app/types"
+import { getCookie } from "@/lib/client-cookie"
 import { BASE_API_URL, BASE_IMAGE_MENU } from "../../../../global"
 import { get } from "@/lib/api-bridge"
 import { AlertInfo } from "@/components/alert/index"
 import Image from "next/image"
 import Search from "@/app/search"
+import { useSearchParams } from "next/navigation"
+import { ButtonDetailOrder } from "@/components/button"
 
 //icon
 import { PiBowlFoodFill, PiHamburgerFill } from "react-icons/pi";
 import { MdEmojiFoodBeverage } from "react-icons/md";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 
-
-const getMenuCategories = async (): Promise<IMenuCategory[]> => {
+const getTransactionHistory = async (): Promise<ITransactionHistory[]> => {
     try {
-        const TOKEN = await getCookies("token");
-        const url = `${BASE_API_URL}/menu/categories`;
-        const { data } = await get(url, TOKEN);
-
-        let result: IMenuCategory[] = [];
-        if (data?.status && data?.menu_categories) result = [...data.menu_categories];
-
-        return result;
-    } catch (error) {
-        console.log(error);
-        return [];
-    }
-};
-
-const getMenu = async (search: string): Promise<IMenu[]> => {
-    try {
-        const TOKEN = await getCookies("token")
-        const url = `${BASE_API_URL}/menu?search=${search}`
+        const TOKEN = getCookie("token") || ""
+        const url = `${BASE_API_URL}/order`
         const { data } = await get(url, TOKEN)
-        let result: IMenu[] = []
-        if (data?.status) result = [...data.data]
+
+        let result: ITransactionHistory[] = []
+        if (data?.status && data?.data) result = [...data.data];
         return result
     } catch (error) {
         console.log(error)
@@ -42,119 +31,60 @@ const getMenu = async (search: string): Promise<IMenu[]> => {
     }
 }
 
-const TransactionPage = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
-    const search = searchParams.search ? searchParams.search.toString() : ``
-    const menuCategories: IMenuCategory[] = await getMenuCategories();
-    const menu: IMenu[] = await
-        getMenu(search)
+const TransactionPage = () => {
+    const [transactionHistory, setTransactionHistory] = useState<ITransactionHistory[]>([])
 
+    useEffect(() => {
+        getTransactionHistory().then(data => {
+            console.log("aaa", data); // ✅ Cek apakah 'item' muncul di sini
+            setTransactionHistory(data);
+        });
+    }, []);
 
-    const getCategoryIcon = (category: string) => {
-        switch (category) {
-            case "Food":
-                return <PiBowlFoodFill className="text-xl text-white" />;
-            case "Drink":
-                return <MdEmojiFoodBeverage className="text-xl text-white" />;
-            case "Snack":
-                return <PiHamburgerFill className="text-xl text-white" />;
-            default:
-                return null;
-        }
-    };
 
     return (
         <div className="flex w-full min-h-dvh bg-[#282828] items-center flex-col">
-            <div className="w-[85%] h-fit mt-6 mb-4">
-                <div className="mb-6 w-2/5 h-11 mr-8">
-                    <Search url={`/cashier/dashboard`} search={search} />
+            <div className="w-3/4 h-fit mt-14">
+                <div className="text-white sfprodisplay tracking-wide flex justify-between items-center">
+                    <p className="text-2xl text-white font-semibold">Transaction</p>
+                    <p className="text-white text-opacity-60">Total Revenue:<span className="text-xl text-white"> Rp 99.999.999,00</span></p>
                 </div>
 
-                {
-                    menuCategories.length == 0 ?
-                        <AlertInfo title="informasi">
-                            No data Available
-                        </AlertInfo>
-                        :
-                        <>
-                            <div className="w-full flex flex-wrap items-center sfprodisplay">
-                                <div className="flex h-10 cursor-pointer rounded mr-4 items-center px-6 w-fit tracking-wide text-white bg-[#323444] border border-transparent hover:border-teal-400 transition-all duration-300">
-                                    All
-                                </div>
+                <div className="mt-6 w-full rounded-b-md rounded-t-2xl overflow-hidden border border-[#5d5d5d]">
+                    <div className="bg-[#5d5d5d] flex sfprodisplay font-medium text-white text-opacity-80 tracking-wide h-[5vh] rounded-t-2xl bg-opacity-80">
+                        <p className="flex items-center pl-6 w-[15%]">Transaction ID</p>
+                        <p className="flex items-center pl-6 w-[35%]">Item</p>
+                        <p className="flex items-center pl-6 w-[20%]">Total Price</p>
+                        <p className="flex items-center pl-6 w-[15%]">Status</p>
+                        <p className="flex items-center pl-6 w-[15%]">Action</p>
+                    </div>
 
-                                {menuCategories.map((data, index) => (
-
-                                    <div key={`keyPrestasi${index}`} className={`flex h-10 cursor-pointer gap-2 rounded mr-4 border border-transparent hover:border-teal-400 transition-all duration-300 items-center pl-4 w-36 tracking-wide text-white bg-[#323444]`}>
-                                        <div className="h-6 w-6 flex items-center justify-center">
-                                            {getCategoryIcon(data.category)}
-                                        </div>
-                                        {data.category}
-                                    </div>
-                                ))}
-
-                            </div>
-                        </>
-                }
-
-            </div>
-
-            <div className="w-full h-hit flex justify-center">
-
-                <div className="w-[60%] h-fit">
                     {
-                        menu.length == 0 ?
+                        transactionHistory.length == 0 ?
                             <AlertInfo title="informasi">
                                 No data Available
                             </AlertInfo>
                             :
                             <>
-                                <div className="w-full flex flex-wrap ">
-                                    {menu.map((data, index) => (
-                                        <div key={`keyPrestasi${index}`} className={`flex flex-col w-[30%] h-[25rem] cursor-pointer bg-[#5e606c] mr-5 mb-4 rounded`}>
-                                            <div className="h-48 w-full overflow-hidden flex items-end justify-center rounded">
-                                                <Image width={40} height={40} src={`${BASE_IMAGE_MENU}/${data.picture}`} className="w-full h-48 object-cover rounded" alt="preview" unoptimized />
-                                            </div>
-
-                                            <div className="w-full h-full sfprodisplay relative">
-                                                <div className="text-white text-opacity-60 pt-4 ml-4 w-full">
-                                                    {data.category}
-                                                </div>
-                                                <div className="w-full text-white text-2xl tracking-wide py-1 font-semibold ml-4">
-                                                    {data.name}
-                                                </div>
-                                                <div className="text-white text-opacity-70 text-sm tracking-wide pt-2 w-11/12 flex justify-between ml-4">
-                                                    <p className="mr-2">{data.description}</p>
-                                                </div>
-                                                <div className="text-white text-opacity-70 text-sm tracking-wide pt-2 w-full flex justify-between ml-4">
-                                                    <p className="text-xl">Rp {data.price}</p>
-                                                </div>
-                                            </div>
-
-                                            <div className="border border-blue-500 flex gap-2 px-5 pb-5">
-                                                <p className="h-6 w-6 flex items-center justify-center ">
-                                                    <FaCirclePlus className=" h-full w-full text-green-500 text-opacity-60"></FaCirclePlus>
-                                                </p>
-
-                                                <p>jumlah</p>
-
-                                                <p className="h-6 w-6 flex items-center justify-center">
-                                                    <FaCircleMinus className=" h-full w-full text-red-400 text-opacity-60"></FaCircleMinus>
-                                                </p>
-                                            </div>
-
+                                {transactionHistory.map((data, index) => {
+                                    return (
+                                        <div key={`keyPrestasi${index}`} className="bg-[#3d3d3d] items-center bg-opacity-60 border-t border-[#5d5d5d] flex sfprodisplay font-medium text-white tracking-wide h-[7vh]">
+                                            <p className="flex items-center pl-6 w-[15%]">{data.id}</p>
+                                            <p className="flex items-center pl-6 w-[35%] overflow-y-auto "> {data.orderList.map((orderItem) => orderItem.Item).join(", ")}</p>
+                                            <p className="flex items-center pl-6 w-[20%]">{data.total_price}</p>
+                                            <p className="flex items-center pl-6 w-[15%]">{data.status}</p>
+                                            {/* <p className="flex items-center pl-6 w-[15%]">{data.quantity}</p> */}
+                                            <p className="flex items-center pl-6 w-[15%]">
+                                                <ButtonDetailOrder type="button">Detail Order</ButtonDetailOrder>
+                                            </p>
                                         </div>
-                                    ))}
+                                    );
+                                })}
 
-                                </div>
                             </>
                     }
+
                 </div>
-
-
-                {/* cart  */}
-                <div className="w-[25%] h-[75dvh] relative ">
-                    <div className="h-[75dvh] w-[25%] fixed top-40 bg-[#f5f5f5] rounded"></div>
-                </div>
-
             </div>
         </div>
     )

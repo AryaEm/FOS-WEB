@@ -3,7 +3,7 @@
 import { IUser } from "@/app/types"
 import { BASE_API_URL } from "../../../../global"
 import { put } from "@/lib/api-bridge"
-import { getCookies } from "@/lib/client-cookie"
+import { getCookie } from "@/lib/client-cookie"
 import { useRouter } from "next/navigation"
 import { FormEvent, useRef, useState, useEffect } from "react"
 import { toast } from "react-toastify"
@@ -16,7 +16,7 @@ export default function ResetPassword({ selectedUser }: { selectedUser: IUser })
     const [isShow, setIsShow] = useState<boolean>(false)
     const [user, setUser] = useState<IUser>(selectedUser || { password: "" })
     const router = useRouter()
-    const TOKEN = getCookies("token") || ""
+    const TOKEN = getCookie("token") || ""
     const formRef = useRef<HTMLFormElement>(null)
 
     useEffect(() => {

@@ -28,7 +28,7 @@ const LoginPage = () => {
                 headers: { "Content-Type": "application/json" }
             })
             if (data.status == true) {
-                toast(data.message, { hideProgressBar: true, containerId: `toastLogin`, type: "success", autoClose: 2000 })
+                toast(data.message, { hideProgressBar: true, containerId: `toastLogin`, type: "success", autoClose: 1000 })
                 storeCookie("token", data.token)
                 storeCookie("id", data.data.id)
                 storeCookie("name", data.data.name)

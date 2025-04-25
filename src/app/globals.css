@@ -144,7 +144,11 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #0D9488;
+  background-color: #0d9488;
   border-radius: 50px;
+}
 
+.border-grad-2 {
+  background: rgb(135,135,135);
+  background: linear-gradient(90deg, rgba(135,135,135,0.10425420168067223) 0%, rgba(135,135,135,1) 50%, rgba(135,135,135,0.1) 100%);
 }

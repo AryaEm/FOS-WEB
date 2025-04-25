@@ -1,124 +1,243 @@
-import { IMenuCategory, IMenu } from "@/app/types"
-import { getCookies } from "@/lib/server-cookie"
+"use client"
+
+import { useEffect, useState } from "react"
+import { ITotalMenu, IFavouriteMenu, ITopThree } from "@/app/types"
+import { getCookie } from "@/lib/client-cookie"
 import { BASE_API_URL, BASE_IMAGE_MENU } from "../../../../global"
 import { get } from "@/lib/api-bridge"
-import { AlertInfo } from "@/components/alert/index"
+import { Pie } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend } from "chart.js";
 import Image from "next/image"
-import Search from "@/app/search"
+import lov from "../../../../public/apaya/WhatsApp Image 2025-02-23 at 22.09.12_4787cc51.jpg"
 
 //icon
-import { PiBowlFoodFill, PiHamburgerFill } from "react-icons/pi";
-import { MdEmojiFoodBeverage } from "react-icons/md";
+import { IoFastFoodSharp } from "react-icons/io5";
+import { BsBagCheckFill, BsFillCartCheckFill } from "react-icons/bs"
+import { RiStackFill } from "react-icons/ri"
+import { AlertInfo } from "@/components/alert"
 
 
-const getMenuCategories = async (): Promise<IMenuCategory[]> => {
+const getTotalMenu = async (): Promise<ITotalMenu[]> => {
     try {
-        const TOKEN = await getCookies("token");
-        const url = `${BASE_API_URL}/menu/categories`;
+        const TOKEN = getCookie("token");
+        const url = `${BASE_API_URL}/menu/total`;
         const { data } = await get(url, TOKEN);
 
-        let result: IMenuCategory[] = [];
-        if (data?.status && data?.menu_categories) result = [...data.menu_categories];
-
-        return result;
+        return data?.status && Array.isArray(data?.total_menu) ? data.total_menu : [];
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return [];
     }
 };
 
-const getMostOrderedMenu = async (): Promise<{ menu: IMenu; totalOrdered: number }[]> => {
+const getMostOrderedMenu = async (): Promise<IFavouriteMenu[]> => {
     try {
-        const TOKEN = await getCookies("token");
+        const TOKEN = getCookie("token");
         const url = `${BASE_API_URL}/menu/most-ordered`;
         const { data } = await get(url, TOKEN);
-        let result: { menu: IMenu; totalOrdered: number }[] = [];
-        if (data?.status) result = [...data.data];
-        return result;
+
+        return data?.status && Array.isArray(data?.data) ? data.data : [];
     } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch most ordered menu:", error);
         return [];
     }
 };
 
-const DashboardPage = async ({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) => {
-    const search = searchParams.search ? searchParams.search.toString() : ``
-    const menuCategories: IMenuCategory[] = await getMenuCategories();
-    const mostOrderedMenu = await getMostOrderedMenu();
-    // getMostOrderedMenu(search)
+const getTopThreeOrderedMenu = async (): Promise<ITopThree[]> => {
+    try {
+        const TOKEN = getCookie("token");
+        const url = `${BASE_API_URL}/menu/top-three-ordered`;
+        const { data } = await get(url, TOKEN);
 
-    const getCategoryIcon = (category: string) => {
-        switch (category) {
-            case "Food":
-                return <PiBowlFoodFill className="text-xl text-white" />;
-            case "Drink":
-                return <MdEmojiFoodBeverage className="text-xl text-white" />;
-            case "Snack":
-                return <PiHamburgerFill className="text-xl text-white" />;
-            default:
-                return null;
+        return data?.status && Array.isArray(data?.data) ? data.data : [];
+    } catch (error) {
+        console.error("Failed to fetch most ordered menu:", error);
+        return [];
+    }
+};
+
+ChartJS.register(CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend);
+
+
+const DashboardPage = () => {
+    const [totalMenu, setTotalMenu] = useState<ITotalMenu[]>([])
+    const [mostOrderedMenu, setMostOrderedMenu] = useState<IFavouriteMenu[]>([]);
+    const [topThreeOrderedMenu, setTopThreeOrderedMenu] = useState<ITopThree[]>([]);
+
+    useEffect(() => {
+        getTotalMenu().then(setTotalMenu);
+        getMostOrderedMenu().then(setMostOrderedMenu);
+        getTopThreeOrderedMenu().then(setTopThreeOrderedMenu);
+    }, []);
+
+    const chartData = {
+        labels: mostOrderedMenu.map(item => item.menu.name),
+        datasets: [
+            {
+                label: "Total Orders",
+                data: mostOrderedMenu.map(item => item.totalOrdered),
+                backgroundColor: [
+                    "#FF6384",
+                    "#36A2EB",
+                    "#7DCEA0",
+                    "#FFCE56",
+                    "#4BC0C0",
+                    "#9966FF",
+                    "#FF9F40",
+                    "#C9CBFF",
+                    "#F1948A",
+                    "#85C1E9",
+                    "#D2B4DE",
+                    "#F7DC6F"
+                ],
+                borderColor: "#424242",
+                borderWidth: 1
+            }
+        ]
+    };
+
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: true,
+                // position: "left" as const, // Geser legend ke kiri
+                labels: {
+                    color: "white", // Ubah warna teks legend menjadi putih
+                    boxWidth: 25, // Atur ukuran kotak warna di legend
+                }
+            },
+            tooltip: {
+                enabled: true,
+                bodyColor: "white", // Warna teks di dalam tooltip
+                titleColor: "white", // Warna judul tooltip
+            }
         }
     };
+
 
     return (
         <div className="flex flex-col w-full min-h-dvh bg-[#282828] items-center">
 
-            <div className="w-3/4 h-[900px] mt-20">
-                <div className="bg-cyan-200 w-full lg:h-72 h-52 rounded-xl"></div>
+            <div className="w-3/4 h-[900px] mt-16 ">
+                <div className="w-full h-[10%] flex flex-wrap justify-between overflow-hidden">
 
-                {
-                    menuCategories.length == 0 ?
-                        <AlertInfo title="informasi">
-                            No data Available
-                        </AlertInfo>
-                        :
-                        <>
-                            <div className="w-full flex flex-wrap items-center sfprodisplay">
-                                <div className="my-6 w-2/5 h-11 mr-8">
-                                    <Search url={`/cashier/dashboard`} search={search} />
-                                </div>
-                                <div className="flex h-10 cursor-pointer gap-2 rounded mx-2 items-center px-6 w-fit tracking-wide text-white bg-[#323444]">
-                                        All
-                                </div>
-
-                                {menuCategories.map((data, index) => (
-
-                                    <div key={`keyPrestasi${index}`} className={`flex h-10 cursor-pointer gap-2 rounded mx-2 items-center pl-4 w-36 tracking-wide text-white bg-[#323444]`}>
-                                        <div className="h-6 w-6 flex items-center justify-center">
-                                            {getCategoryIcon(data.category)}
-                                        </div>
-                                        {data.category}
+                    <div className="w-[23%] border border-gray-400 rounded-lg h-full bg-[#424242] sfprodisplay flex items-center">
+                        <div className="border border-teal-400 h-12 rounded-xl bg-[#282828] w-12 flex items-center mx-4 justify-center text-2xl text-white text-opacity-90">
+                            <IoFastFoodSharp />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            {
+                                totalMenu.length === 0 ? (
+                                    <p className="text-white">No data available</p>
+                                ) : (
+                                    <div className="font-semibold text-xl text-white">
+                                        {totalMenu[0].total} { }
                                     </div>
-                                ))}
-
-                            </div>
-                        </>
-                }
-
-                <div className="w-full border-2 border-pink-500 my-6 sfprodisplay">
-                    <div className="text-2xl font-semibold text-white text-opacity-80">
-                        Favourite Menus
+                                )
+                            }
+                            <p className="text-white text-opacity-80 text-sm tracking-wide">Total menus</p>
+                        </div>
                     </div>
 
-                    {mostOrderedMenu.length === 0 ? (
-                        <AlertInfo title="Informasi">No data available</AlertInfo>
-                    ) : (
-                        <div className="w-full flex flex-wrap gap-6 border-2 border-green-500 my-4">
-                            {mostOrderedMenu.map((item, index) => (
-                                <div key={`mostOrdered_${index}`} className="flex flex-col w-64 bg-[#323444] text-white p-4 rounded-lg" >
-                                    <h3 className="text-lg font-bold">{item.menu.name}</h3>
-                                    <Image width={40} height={40} alt="Preview" src={`${BASE_IMAGE_MENU}/${item.menu.picture}`}></Image>
-                                    <p className="text-sm opacity-70">{item.menu.category}</p>
-                                    <p className="text-md mt-2">Total Ordered: {item.totalOrdered}</p>
-                                </div>
-                            ))}
+
+
+                    <div className="w-[23%] border border-gray-400 rounded-lg h-full bg-[#424242] sfprodisplay flex items-center">
+                        <div className="border border-teal-400 h-12 rounded-xl bg-[#282828] w-12 flex items-center mx-4 justify-center text-2xl text-white text-opacity-90">
+                            <BsFillCartCheckFill />
                         </div>
-                    )}
+                        <div className="flex flex-col gap-1">
+                            <div className="font-semibold text-xl text-white">
+                                berapa ya
+                            </div>
+                            <p className="text-white text-opacity-80 text-sm tracking-wide">Total order</p>
+                        </div>
+                    </div>
+
+
+
+                    <div className="w-[23%] border border-gray-400 rounded-lg h-full bg-[#424242] sfprodisplay flex items-center">
+                        <div className="border border-teal-400 h-12 rounded-xl bg-[#282828] w-12 flex items-center mx-4 justify-center text-2xl text-white text-opacity-90">
+                            <RiStackFill />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <div className="font-semibold text-xl text-white">
+                                berapa ya
+                            </div>
+                            <p className="text-white text-opacity-80 text-sm tracking-wide">Order on process</p>
+                        </div>
+                    </div>
+
+
+
+
+                    <div className="w-[23%] border border-gray-400 rounded-lg h-full bg-[#424242] sfprodisplay flex items-center">
+                        <div className="border border-teal-400 h-12 rounded-xl bg-[#282828] w-12 flex items-center mx-4 justify-center text-2xl text-white text-opacity-90">
+                            <BsBagCheckFill />
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <div className="font-semibold text-xl text-white">
+                                berapa ya
+                            </div>
+                            <p className="text-white text-opacity-80 text-sm tracking-wide">Order done</p>
+                        </div>
+                    </div>
 
                 </div>
 
-            </div>
 
+                <div className="w-full flex mt-8 justify-between">
+                    <div className="border border-gray-400 h-[55dvh] w-1/2 bg-[#424242] rounded-lg">
+                        <h2 className="text-white text-lg font-semibold p-4">Favourite Menu</h2>
+                        {
+                            mostOrderedMenu.length === 0 ? (
+                                <p className="text-white text-5xl font-semibold text-center">No data available</p>
+                            ) : (
+                                <div className="w-full h-full flex justify-center">
+                                    <div className="h-4/5 w-[95%]">
+                                        <Pie data={chartData} options={chartOptions} />
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div>
+
+                    <div className="w-[47%] rounded-lg h-[55dvh] bg-[#424242] border border-gray-400 flex flex-col items-center">
+                        <h2 className="text-white text-lg font-semibold p-4">Most Favourite Item</h2>
+                        {
+                            topThreeOrderedMenu.length == 0 ?
+                                <AlertInfo title="informasi">
+                                    No data Available
+                                </AlertInfo>
+                                :
+                                <>
+                                    {topThreeOrderedMenu.map((data, index) => {
+                                        return (
+                                            <div key={`keyPrestasi${index}`} className="h-[12vh] flex mx-4 mb-6 bg-[#282828] bg-opacity-70 w-10/12 border-l-[3px] border-teal-400 rounded-xl overflow-hidden">
+                                                <div className="flex items-center w-60 overflow-hidden rounded-lg">
+                                                    <Image src={`${BASE_IMAGE_MENU}/${data.menu.picture}`} alt="" width={70} height={70} className=" h-[12vh] object-cover w-60"></Image>
+                                                </div>
+                                                <div className="w-[60%] flex flex-col justify-between">
+                                                    <div className="pt-2 w-full">
+                                                        <p className="flex leading-tight items-center text-white text-opacity-90 pl-6 w-full font-semibold text-base">{data.menu.name}</p>
+                                                        <p className="flex leading-tight items-center pl-6 w-full font-semibold text-sm text-teal-400">{data.menu.category}</p>
+                                                    </div>
+
+                                                    <p className="flex pb-2 text-white text-opacity-60 items-center pl-2 border-teal-700 border-opacity-80 ml-4 w-[66%] border-t">Total ordered: {data.totalOrdered}</p>
+                                                </div>
+                                                <p className="w-[26%] flex items-center text-white text-opacity-80 justify-end pr-4 text-sm font-medium">Rp {data.menu.price}</p>
+                                            </div>
+                                        );
+                                    })}
+
+                                </>
+                        }
+
+                        {/* <Image src={lov} alt="gatau buat apa" className="h-10/12 cursor-pointer mx-4 w-10/12 object-cover rounded-lg border-l-4 border-teal-400"></Image> */}
+                    </div>
+                </div>
+            </div>
 
         </div >
     )

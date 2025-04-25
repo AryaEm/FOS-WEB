@@ -3,7 +3,7 @@
 import { useState, useRef, FormEvent } from "react";
 import { BASE_API_URL } from "../../../../global";
 import { post } from "@/lib/api-bridge";
-import { getCookies } from "@/lib/client-cookie";
+import { getCookie } from "@/lib/client-cookie";
 import { toast } from "react-toastify";
 import { ButtonSuccesOutline, ButtonSuccess, ButtonDanger } from "@/components/button";
 import { InputGroupComponent } from "@/components/InputComponent";
@@ -25,7 +25,7 @@ const AddUser = () => {
         updatedAt: ``
         // profile_picture: "
     });
-    const TOKEN = getCookies("token") || "";
+    const TOKEN = getCookie("token") || "";
     const router = useRouter()
     // const [file, setFile] = useState<File | null>(null);
     const formRef = useRef<HTMLFormElement>(null);

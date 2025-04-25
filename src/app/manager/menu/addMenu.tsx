@@ -48,7 +48,7 @@ const AddMenu = () => {
             payload.append("description", description || "")
             if (file !== null) payload.append("picture", file || "")
             const { data } = await post(url, payload, TOKEN)
-            if (data?.status) { 
+            if (data?.status) {
                 setIsShow(false)
                 toast(data?.message, { hideProgressBar: true, containerId: `toastMenu`, type: `success` })
                 setTimeout(() => router.refresh(), 1000)
@@ -95,21 +95,23 @@ const AddMenu = () => {
 
                     {/* modal body */}
                     <div className="p-5">
+                        <p className="text-sm font-semibold">Name</p>
                         <InputGroupComponent id={`name`} type="text" value={menu.name}
                             onChange={val => setMenu({ ...menu, name: val })}
                             required={true} label="Name" />
 
-
+                        <p className="text-sm font-semibold pt-2">Price</p>
                         <InputGroupComponent id={`price`} type="number" value={menu.price.toString()}
                             onChange={val => setMenu({ ...menu, price: Number(val) })}
                             required={true} label="Price" />
 
-
+                        <p className="text-sm font-semibold pt-2">Description</p>
                         <InputGroupComponent id={`description`} type="text" value={menu.description}
                             onChange={val => setMenu({ ...menu, description: val })}
                             required={true} label="Description" />
 
-                        <Select id={`category`} value={menu.category} label="Category"
+                        <p className="text-sm font-semibold pt-2">Category</p>
+                        <Select id={`category`} value={menu.category}
                             required={true} onChange={val => setMenu({ ...menu, category: val })}>
                             <option value="">--- Select Category ---</option>
                             <option value="Food">Food</option>

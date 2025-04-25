@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext, useState } from "react";
-import { storeCookie, getCookie, removeCookie } from "@/lib/client-cookie";
+import { storeCookie, getCookie } from "@/lib/client-cookie";
 import { ICartItem } from "@/app/types";
 
 
@@ -20,6 +20,7 @@ interface CartContextType {
   addToCart: (item: ICartItem) => void;
   updateQuantity: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
+  updateNote: (id: number, note: string) => void; // Tambahkan ini
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -34,10 +35,12 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       category: item.category,
       picture: item.picture,
       description: item.description,
-      quantity: item.quantity
+      quantity: item.quantity,
+      note: item.note || ""
     }));
-    
-    storeCookie("cart", JSON.stringify(cartToSave)); 
+
+    console.log("Cart to save:", cartToSave);
+    storeCookie("cart", JSON.stringify(cartToSave));
   };
 
   const [cart, setCart] = useState<ICartItem[]>(() => {
@@ -51,14 +54,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         ? prevCart.map(cartItem => cartItem.id === item.id
           ? { ...cartItem, quantity: cartItem.quantity + 1 }
           : cartItem)
-        : [...prevCart, { 
-            ...item, 
-            quantity: 1,
-            uuid: item.uuid || crypto.randomUUID(), // Tambahkan UUID jika tidak ada
-            category: item.category || "Unknown", // Default category jika tidak ada
-            description: item.description || "No description available" // Default jika kosong
-          }];
-  
+        : [...prevCart, {
+          ...item,
+          quantity: 1,
+          uuid: item.uuid || crypto.randomUUID(), 
+          category: item.category || "Unknown", 
+          description: item.description || "No description available" 
+        }];
+
       saveCartToCookie(updatedCart);
       return updatedCart;
     });
@@ -72,19 +75,30 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   const removeFromCart = (itemId: number) => {
     setCart((prevCart) => {
-        const updatedCart = prevCart
-            .map((item) =>
-                item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
-            )
-            .filter((item) => item.quantity > 0);
+      const updatedCart = prevCart
+        .map((item) =>
+          item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
+        )
+        .filter((item) => item.quantity > 0);
 
-        saveCartToCookie(updatedCart);
-        return updatedCart;
+      saveCartToCookie(updatedCart);
+      return updatedCart;
     });
-};
+  };
+
+  const updateNote = (id: number, note: string) => {
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((item) =>
+        item.id === id ? { ...item, note } : item
+      );
+
+      saveCartToCookie(updatedCart);
+      return updatedCart;
+    });
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, updateNote }}>
       {children}
     </CartContext.Provider>
   );

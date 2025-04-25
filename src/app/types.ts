@@ -22,6 +22,12 @@ export interface IUser {
     updatedAt: string
 }
 
+export interface ICustomer {
+    customer: string,
+    table_number: string,
+    payment_method: string
+}
+
 export interface IMenuCategory {
     category: string
 }
@@ -35,4 +41,30 @@ export interface ICartItem {
     picture: string;
     description: string;
     quantity: number;
+    note?: string;
+}
+
+export interface ITotalMenu {
+    total: string
+}
+
+export interface IFavouriteMenu {
+    menu: IMenu;
+    totalOrdered: number;
+}
+
+export interface ITransactionHistory {
+    id: number
+    total_price: number
+    status: string
+    quantity: number
+    orderList: {
+        Item: string | null,
+        quantity: number | null
+    }[] // ✅ Alternatif yang lebih ringkas
+}
+
+export interface ITopThree {
+    menu: IMenu;
+    totalOrdered: number;
 }

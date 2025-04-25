@@ -3,7 +3,7 @@
 import { IUser } from "@/app/types"
 import { BASE_API_URL } from "../../../../global"
 import { drop } from "@/lib/api-bridge"
-import { getCookies } from "@/lib/client-cookie"
+import { getCookie } from "@/lib/client-cookie"
 import { useRouter } from "next/navigation"
 import { FormEvent, useState } from "react"
 import { toast } from "react-toastify"
@@ -15,7 +15,7 @@ export default function DeleteUser({ selectedUser }: { selectedUser: IUser }) {
     const [isShow, setIsShow] = useState<boolean>(false)
     const [user, setUser] = useState<IUser>({ ...selectedUser})
     const router = useRouter()
-    const TOKEN = getCookies("token") || ""
+    const TOKEN = getCookie("token") || ""
 
     const openModal = () => {
         setUser({ ...selectedUser })
