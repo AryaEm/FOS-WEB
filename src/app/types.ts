@@ -55,8 +55,11 @@ export interface IFavouriteMenu {
 
 export interface ITransactionHistory {
     id: number
+    uuid: string
     total_price: number
     customer: string
+    table_number: string
+    payment_method: string
     status: string
     quantity: number
     orderList: {

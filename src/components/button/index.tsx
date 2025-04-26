@@ -77,10 +77,11 @@ export const ButtonReset = ({ children, type, onClick, className }: Props) => {
 }
 
 
-export const ButtonDetailOrder = ({ children, type, className }: Props) => {
+export const ButtonDetailOrder = ({ children, type, className, onClick }: Props) => {
     return (
         <button className={`text-xs bg-[#5d5d5d] text-white border border-transparent rounded-md bg-opacity-80 py-1 px-4 hover:bg-[#3f3f3f] transition-all duration-300 hover:text-white font-medium tracking-wide ${className}`}
-            type={type}>
+            type={type}
+            onClick={onClick}>
             {children}
         </button>
     )

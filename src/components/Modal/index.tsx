@@ -17,4 +17,4 @@ const Modal = ({ children, isShow, onClose }: { children: ReactNode, isShow: boo
         </div>
     )
 }
-export default Modal
+export default Modal    
