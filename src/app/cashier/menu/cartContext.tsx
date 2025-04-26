@@ -20,7 +20,12 @@ interface CartContextType {
   addToCart: (item: ICartItem) => void;
   updateQuantity: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
-  updateNote: (id: number, note: string) => void; // Tambahkan ini
+  updateNote: (id: number, note: string) => void;
+  customer: string;
+  table_number: string;
+  payment_method: string;
+  updateCustomerInfo: (key: "customer" | "table_number" | "payment_method", value: string) => void;
+  resetCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -43,6 +48,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     storeCookie("cart", JSON.stringify(cartToSave));
   };
 
+  const [customer, setCustomerName] = useState(() => getCookie("customer") || "");
+  const [table_number, setTableNumber] = useState(() => getCookie("table_number") || "");
+  const [payment_method, setPaymentMethod] = useState(() => getCookie("payment_method") || "");
+
   const [cart, setCart] = useState<ICartItem[]>(() => {
     const savedCart = getCookie("cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -57,9 +66,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         : [...prevCart, {
           ...item,
           quantity: 1,
-          uuid: item.uuid || crypto.randomUUID(), 
-          category: item.category || "Unknown", 
-          description: item.description || "No description available" 
+          uuid: item.uuid || crypto.randomUUID(),
+          category: item.category || "Unknown",
+          description: item.description || "No description available"
         }];
 
       saveCartToCookie(updatedCart);
@@ -97,8 +106,39 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const resetCart = () => {
+    setCart([]);
+    setCustomerName("");
+    setTableNumber("");
+    setPaymentMethod("");
+    storeCookie("cart", "");
+    storeCookie("customer", "");
+    storeCookie("table_number", "");
+    storeCookie("payment_method", "");
+  };
+
+  const updateCustomerInfo = (key: "customer" | "table_number" | "payment_method", value: string) => {
+    if (key === "customer") setCustomerName(value);
+    else if (key === "table_number") setTableNumber(value);
+    else if (key === "payment_method") setPaymentMethod(value);
+
+    storeCookie(key, value);
+  };
+
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart, updateNote }}>
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      updateQuantity,
+      removeFromCart,
+      updateNote,
+      customer,
+      table_number,
+      payment_method,
+      updateCustomerInfo,
+      resetCart
+    }}>
       {children}
     </CartContext.Provider>
   );

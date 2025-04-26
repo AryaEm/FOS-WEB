@@ -8,7 +8,7 @@ import { get } from "@/lib/api-bridge"
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, ArcElement, Title, Tooltip, Legend } from "chart.js";
 import Image from "next/image"
-import lov from "../../../../public/apaya/WhatsApp Image 2025-02-23 at 22.09.12_4787cc51.jpg"
+// import lov from "../../../../public/apaya/WhatsApp Image 2025-02-23 at 22.09.12_4787cc51.jpg"
 
 //icon
 import { IoFastFoodSharp } from "react-icons/io5";

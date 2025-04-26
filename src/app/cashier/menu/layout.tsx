@@ -1,6 +1,7 @@
 import UserTemplate from "@/components/cashierTemplate"
 import MenuListCashier from "../menuListCashier"
 import { CartProvider } from "./cartContext"
+import { ToastContainer } from "react-toastify"
 
 export const metadata = {
     title: 'Menu | FOS',
@@ -14,6 +15,7 @@ type PropsLayout = {
 const RootLayout = ({ children }: PropsLayout) => {
     return (
         <CartProvider>
+            <ToastContainer containerId="toastCheckout" />
             <UserTemplate title="Menu" id="menu" menuList={MenuListCashier}>
                 {children}
             </UserTemplate>

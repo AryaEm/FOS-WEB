@@ -6,15 +6,15 @@ import { getCookie } from "@/lib/client-cookie"
 import { BASE_API_URL, BASE_IMAGE_MENU } from "../../../../global"
 import { get } from "@/lib/api-bridge"
 import { AlertInfo } from "@/components/alert/index"
-import Image from "next/image"
-import Search from "@/app/search"
-import { useSearchParams } from "next/navigation"
+// import Image from "next/image"
+// import Search from "@/app/search"
+// import { useSearchParams } from "next/navigation"
 import { ButtonDetailOrder } from "@/components/button"
 
 //icon
-import { PiBowlFoodFill, PiHamburgerFill } from "react-icons/pi";
-import { MdEmojiFoodBeverage } from "react-icons/md";
-import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
+// import { PiBowlFoodFill, PiHamburgerFill } from "react-icons/pi";
+// import { MdEmojiFoodBeverage } from "react-icons/md";
+// import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
 
 const getTransactionHistory = async (): Promise<ITransactionHistory[]> => {
     try {
@@ -52,9 +52,9 @@ const TransactionPage = () => {
 
                 <div className="mt-6 w-full rounded-b-md rounded-t-2xl overflow-hidden border border-[#5d5d5d]">
                     <div className="bg-[#5d5d5d] flex sfprodisplay font-medium text-white text-opacity-80 tracking-wide h-[5vh] rounded-t-2xl bg-opacity-80">
-                        <p className="flex items-center pl-6 w-[15%]">Transaction ID</p>
+                        <p className="flex items-center pl-6 w-[20%]">Customer Name</p>
                         <p className="flex items-center pl-6 w-[35%]">Item</p>
-                        <p className="flex items-center pl-6 w-[20%]">Total Price</p>
+                        <p className="flex items-center pl-6 w-[15%]">Total Price</p>
                         <p className="flex items-center pl-6 w-[15%]">Status</p>
                         <p className="flex items-center pl-6 w-[15%]">Action</p>
                     </div>
@@ -69,9 +69,21 @@ const TransactionPage = () => {
                                 {transactionHistory.map((data, index) => {
                                     return (
                                         <div key={`keyPrestasi${index}`} className="bg-[#3d3d3d] items-center bg-opacity-60 border-t border-[#5d5d5d] flex sfprodisplay font-medium text-white tracking-wide h-[7vh]">
-                                            <p className="flex items-center pl-6 w-[15%]">{data.id}</p>
-                                            <p className="flex items-center pl-6 w-[35%] overflow-y-auto "> {data.orderList.map((orderItem) => orderItem.Item).join(", ")}</p>
-                                            <p className="flex items-center pl-6 w-[20%]">{data.total_price}</p>
+                                            <p className="flex items-center pl-6 w-[20%]">
+                                                {data.customer.length > 18
+                                                    ? data.customer.substring(0, 18) + "..."
+                                                    : data.customer}
+                                            </p>
+                                            <p className="flex items-center pl-6 w-[35%] overflow-y-auto ">
+                                                {
+                                                    data.orderList.length > 3
+                                                        ? data.orderList.slice(0, 3).map(item => item.Item).join(", ") + "..."
+                                                        : data.orderList.map(item => item.Item).join(", ")
+                                                }
+                                            </p>
+                                            <p className="flex items-center pl-6 w-[15%]">
+                                                IDR {data.total_price.toLocaleString("id-ID")}
+                                            </p>
                                             <p className="flex items-center pl-6 w-[15%]">{data.status}</p>
                                             {/* <p className="flex items-center pl-6 w-[15%]">{data.quantity}</p> */}
                                             <p className="flex items-center pl-6 w-[15%]">

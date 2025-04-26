@@ -51,6 +51,9 @@ export default function Sidebar({ children, id, menuList }: ManagerProp) {
         removeCookie("role")
         removeCookie("profile_picture")
         removeCookie("cart")
+        removeCookie("customer")
+        removeCookie("payment_method")
+        removeCookie("table_number")
         router.replace(`/login`)
     };
 

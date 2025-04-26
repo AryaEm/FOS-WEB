@@ -74,7 +74,7 @@ export const ButtonReset = ({ children, type, onClick, className }: Props) => {
             {children}
         </button>
     )
-}   
+}
 
 
 export const ButtonDetailOrder = ({ children, type, className }: Props) => {

@@ -12,6 +12,8 @@ import { useCart } from "./cartContext"
 import { useSearchParams } from "next/navigation"
 import MenuCategory from "./menu-category"
 import { InputNote } from "@/components/InputComponent"
+import { toast } from "react-toastify"
+import { useRouter } from "next/navigation"
 
 //icon
 // import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
@@ -39,15 +41,20 @@ const CashierMenuPage = () => {
     const searchParams = useSearchParams();
     const search = searchParams.get("search") || ""
     // const menu: IMenu[] = await
-    const { addToCart } = useCart()
-    const { removeFromCart } = useCart()
-    const { cart, updateNote } = useCart()
+    const {
+        cart,
+        addToCart,
+        removeFromCart,
+        updateNote,
+        customer,
+        table_number,
+        payment_method,
+        updateCustomerInfo,
+        resetCart,
+    } = useCart();
     const [menu, setMenu] = useState<IMenu[]>([]);
-    const [customerName, setCustomerName] = useState("");
-    const [tableNumber, setTableNumber] = useState("");
-    const [paymentMethod, setPaymentMethod] = useState("");
     const [loadingCheckout, setLoadingCheckout] = useState(false);
-
+    const router = useRouter()
 
     useEffect(() => {
         getMenu(search).then(setMenu);
@@ -69,37 +76,47 @@ const CashierMenuPage = () => {
     };
 
     const handleRemoveFromCart = (itemId: number) => {
-        removeFromCart(itemId); // Panggil fungsi dari useCart
+        removeFromCart(itemId);
     };
 
     const handleCheckout = async () => {
-        if (!customerName || !tableNumber || !paymentMethod) {
-            alert("Mohon lengkapi data customer, nomor meja, dan metode pembayaran.");
+        // if (!customer || !table_number || !payment_method) {
+        //     toast("Mohon lengkapi data customer, nomor meja, dan metode pembayaran.", {
+        //         hideProgressBar: true,
+        //         containerId: `toastCheckout`,
+        //         type: `warning`
+        //     });
+        //     return;
+        // }
+
+        if (cart.length === 0) {
+            toast("Keranjang kosong.", {
+                hideProgressBar: true,
+                containerId: `toastCheckout`,
+                type: `warning`
+            });
             return;
         }
 
-        if (cart.length === 0) {
-            alert("Keranjang kosong.");
-            return;
-        }
 
         try {
             setLoadingCheckout(true);
             const TOKEN = getCookie("token") || "";
 
             const payload = {
-                customer_name: customerName,
-                table_number: tableNumber,
-                payment_method: paymentMethod,
-                total_price: getTotalPrice(),
-                items: cart.map((item) => ({
-                    menu_id: item.id,
+                customer: customer,
+                table_number: table_number,
+                payment_method: payment_method,
+                // total_price: getTotalPrice(),
+                orderlists: cart.map((item) => ({
+                    menuId: item.id,
                     quantity: item.quantity,
                     note: item.note || "",
                 })),
             };
+            console.log("Checkout Payload:", payload);
 
-            const response = await fetch(`${BASE_API_URL}/checkout`, {
+            const response = await fetch(`${BASE_API_URL}/order`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -109,16 +126,30 @@ const CashierMenuPage = () => {
             });
 
             const data = await response.json();
+            console.log("Response from /order:", data);
 
             if (data?.status) {
-                alert("Transaksi berhasil!");
-                location.reload(); // Atau bisa reset cart
+                toast(data?.message || "Transaksi berhasil!", {
+                    hideProgressBar: true,
+                    containerId: `toastCheckout`,
+                    type: `success`
+                });
+                resetCart();
+                setTimeout(() => router.refresh(), 1000); // Optional: reload data
             } else {
-                alert("Gagal melakukan checkout.");
+                toast(data?.message || "Terjadi kesalahan validasi.", {
+                    hideProgressBar: true,
+                    containerId: `toastCheckout`,
+                    type: `warning`
+                });
             }
         } catch (error) {
             console.error(error);
-            alert("Terjadi kesalahan.");
+            toast("Terjadi kesalahan sistem.", {
+                hideProgressBar: true,
+                containerId: `toastCheckout`,
+                type: `error`
+            });
         } finally {
             setLoadingCheckout(false);
         }
@@ -244,7 +275,7 @@ const CashierMenuPage = () => {
                             <div className="mt-1 w-3/5 h-[3px] custom-border-color"></div>
                         </h2>
 
-                        <div className="mx-4 mt-0 h-[55%] sfprodisplay overflow-y-auto custom-scrollbar ">
+                        <div className="mx-4 mt-0 h-[57%] sfprodisplay overflow-y-auto custom-scrollbar ">
                             {cart.map((item, index) => (
                                 <div key={index} className="text-white flex mb-4 mt-4 mr-4 border border-zinc-400 bg-[#6c6c6c] h-28 py-3 px-2 rounded-lg relative">
                                     <Image width={40} height={40} src={`${BASE_IMAGE_MENU}/${item.picture}`} className="w-20 h-22 rounded-xl cashier-cart-shadow object-cover" alt="preview" unoptimized />
@@ -279,25 +310,25 @@ const CashierMenuPage = () => {
                                 <input
                                     type="text"
                                     className="bg-transparent w-full border p-2 rounded text-white outline-none border-[#6c6c6c]"
-                                    placeholder="Nama Customer"
-                                    value={customerName}
-                                    onChange={(e) => setCustomerName(e.target.value)}
+                                    placeholder="Customer Name"
+                                    value={customer}
+                                    onChange={(e) => updateCustomerInfo("customer", e.target.value)}
                                 />
                                 <input
                                     type="text"
                                     className="bg-transparent w-full border p-2 rounded text-white outline-none border-[#6c6c6c]"
                                     placeholder="Table Number"
-                                    value={tableNumber}
-                                    onChange={(e) => setTableNumber(e.target.value)}
+                                    value={table_number}
+                                    onChange={(e) => updateCustomerInfo("table_number", e.target.value)}
                                 />
                                 <select
                                     className="w-full border p-2 rounded text-white outline-none border-none bg-[#6c6c6c] bg-opacity-50"
-                                    value={paymentMethod}
-                                    onChange={(e) => setPaymentMethod(e.target.value)}
+                                    value={payment_method}
+                                    onChange={(e) => updateCustomerInfo("payment_method", e.target.value)}
                                 >
-                                    <option value="" className="bg-transparent">Metode Pembayaran</option>
-                                    <option value="cash" className="bg-transparent">Cash</option>
-                                    <option value="qris" className="bg-transparent">Qris</option>
+                                    <option value="" className="bg-transparent">Payment Method</option>
+                                    <option value="Cash" className="bg-transparent">Cash</option>
+                                    <option value="Qris" className="bg-transparent">Qris</option>
                                 </select>
                             </form>
                         </div>
